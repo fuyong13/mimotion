@@ -10,7 +10,7 @@ import random
 import re
 import time
 import os
-
+from datetime import datetime
 from util.aes_help import encrypt_data, decrypt_data
 import util.zepp_helper as zeppHelper
 import util.push_util as push_util
@@ -174,6 +174,12 @@ class MiMotionRunner:
         user_tokens[self.user] = user_token_info
         return app_token
 
+
+    def log_variables(*variables, filename='app.log'):
+        """记录变量到日志文件，每行一条记录"""
+        timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        with open(filename, 'a', encoding='utf-8') as f:
+            f.write(f"[{timestamp}] " + ' '.join(str(v) for v in variables) + '\n') 
     # 主函数
     def login_and_post_step(self, min_step, max_step):
         if self.invalid:
@@ -185,6 +191,7 @@ class MiMotionRunner:
         step = str(random.randint(min_step, max_step))
         self.log_str += f"已设置为随机步数范围({min_step}~{max_step}) 随机值:{step}\n"
         ok, msg = zeppHelper.post_fake_brand_data(step, app_token, self.user_id)
+        log_variables("用户：", self.user_id, "  步数：", step)
         return f"修改步数（{step}）[" + msg + "]", ok
 
 
