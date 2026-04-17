@@ -191,7 +191,7 @@ class MiMotionRunner:
         step = str(random.randint(min_step, max_step))
         self.log_str += f"已设置为随机步数范围({min_step}~{max_step}) 随机值:{step}\n"
         ok, msg = zeppHelper.post_fake_brand_data(step, app_token, self.user_id)
-        log_variables("用户：", {desensitize_user_name(user_mi)}, "  步数：", step)
+        log_variables("用户：",  self.user_id, "  步数：", step)
         return f"修改步数（{step}）[" + msg + "]", ok
 
 
